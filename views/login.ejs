@@ -48,6 +48,7 @@
     </div>
   </div>
 
+ 
   <script type="text/javascript">
     const loginForm = document.querySelector('form');
     const emailError = document.querySelector('.emailErr');
@@ -60,16 +61,23 @@
           const email = loginForm.email.value;
           const password = loginForm.password.value;
 
-           try {
+          // reset error messages
+          emailError.textContent = "";
+          passwordError.textContent = "";
+
+          try {
                 const res = await fetch('/login', { 
                 method: 'POST', 
                 body: JSON.stringify({ email, password }),
-                credentials: "include",
+                credentials:"include",
                 headers: {'Content-Type': 'application/json'}
               })
               const data = await res.json()
               console.log(data);
-            
+              if (data.errors) {
+                emailError.textContent = data.errors.email;
+                passwordError.textContent = data.errors.password;
+              }
               if (data.user) {
                 location.assign('/dashboard')             
               }
@@ -79,7 +87,6 @@
     })
 
   </script> 
-
 
 
 <%- include('partials/footer'); -%>

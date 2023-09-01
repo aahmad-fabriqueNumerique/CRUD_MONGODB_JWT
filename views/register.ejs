@@ -60,7 +60,10 @@
           const email = registerForm.email.value;
           const password = registerForm.password.value;
 
- 
+          // reset error messages
+          emailError.textContent = "";
+          passwordError.textContent = "";
+
           try {
               const response = await fetch('/register', {
                   method: 'POST',
@@ -70,7 +73,10 @@
               })
               const data = await response.json()
               console.log(data);
-    
+              if (data.errors) {
+                emailError.textContent = data.errors.email;
+                passwordError.textContent = data.errors.password;
+              }
               if (data.user) {
                 location.assign('/login')
               }
