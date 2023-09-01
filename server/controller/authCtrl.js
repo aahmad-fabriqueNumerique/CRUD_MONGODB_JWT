@@ -91,6 +91,11 @@ const post_signup = async (req, res) => {
     const {email, password} = req.body;
     
     try {
+        // Creating a new user
+        // it create an instance of the user and send it to db
+        // the properties to be added must match the schema
+        // it asynchronous func
+        // we add await and async
         const userCreated = await User.create({email, password})
         const token = generateToken(userCreated._id)
         res.cookie('dwwn', token, {
@@ -99,7 +104,7 @@ const post_signup = async (req, res) => {
             sameSite: "lax",
             maxAge: maxAge * 1000
         })
-        res.status(200).json({user: userCreated._id}) // destructure it to get only the token
+        res.status(201).json({user: userCreated._id}) // destructure it to get only the token
     } catch (err) {
         const errors = errHandler(err);
         res.status(400).json({errors})
@@ -119,10 +124,10 @@ const post_login = async (req, res) => {
          // import the user login static method
         const user = await User.login(email, password)
 
-        const token = generateToken(user._id)
+        const token = generateToken(user._id) // we got access from the db
         res.cookie('dwwm', token, {
             httpOnly: true,
-            maxAge: maxAge * 1000
+            maxAge: maxAge * 1000 // We need to convert it to seconds
         })
       
         res.status(200).json({ user: user._id })
