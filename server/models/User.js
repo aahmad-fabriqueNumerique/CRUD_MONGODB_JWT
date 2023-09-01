@@ -44,7 +44,7 @@ userSchema.statics.login = async function(email, password) {
     // check the user with entered email
     const user = await this.findOne({ email: email}); // this refers to the user model not the instance of user
     if (user) {
-        const authenticatedUser = await bcrypt.compare(password, user.password); // first arg password not hashed, 2nd hashed pass in bd 
+        const authenticatedUser = await bcrypt.compare(password, user.password); // first arg password not hashed, 2nd hashed password in bd 
         if(authenticatedUser) {
             return user
         }
